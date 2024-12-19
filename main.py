@@ -1,7 +1,8 @@
 from utils.filter_columns import filter_csv_columns
 from utils.clean_data import get_clean_work_time
 from utils.filter_rows import filter_rows
-import matplotlib.pyplot as plt
+from chart.plot_time_series import plot_time_series
+from chart.frequentation_diagram import get_frequentation_diagram
 
 # Chemins vers les fichiers
 work_time_file = "data/temps-de-travail-annuel-depuis-1851.csv"
@@ -45,32 +46,26 @@ print("\nFrequentation Filtrée :")
 print(frequentation_filtered)
 
 
-def get_frequentation_diagram(frequentation_df):
-    # Vérification des colonnes requises
-    required_columns = [
-        'Nom de la gare', 
-        'Total Voyageurs + Non voyageurs 2017', 
-        'Total Voyageurs + Non voyageurs 2018'
-    ]
-    for col in required_columns:
-        if col not in frequentation_df.columns:
-            raise ValueError(f"Colonne manquante dans le DataFrame : {col}")
-    
-    # Configuration des données
-    frequentation_df = frequentation_df.set_index('Nom de la gare')[
-        ['Total Voyageurs + Non voyageurs 2017', 'Total Voyageurs + Non voyageurs 2018']
-    ]
-    
-    # Création du graphique
-    frequentation_df.plot(kind='bar', figsize=(12, 6))
-    plt.title("Comparaison fréquentation des gares entre 2017 et 2018")
-    plt.xlabel("Nom de la gare")
-    plt.ylabel("Total voyageurs")
-    plt.xticks(rotation=45)  # Rotation des noms de gare
-    plt.grid(axis='y')       # Grille sur l'axe Y
-    plt.legend(title="Année")  # Légende avec titre
-    plt.tight_layout()  # Ajuste la mise en page pour éviter le chevauchement
-    plt.show()
-
 # Exemple d'utilisation
 get_frequentation_diagram(frequentation_filtered)
+
+
+# # Filtrage des années 2017 et 2018 pour la démonstration
+# work_time_filtered = work_time[work_time['Date'].isin([2017, 2018])]
+
+# # Colonnes pour l'axe Y
+# y_columns = [
+#     "Temps annuel de travail (SNCF)", 
+#     "Temps annuel de travail (France)"
+# ]
+
+# # Affichage du graphique
+
+# plot_time_series(
+#     work_time_filtered, 
+#     x_col="Date", 
+#     y_cols=y_columns, 
+#     title="Évolution du Temps Annuel de Travail (2017-2018)",
+#     xlabel="Année",
+#     ylabel="Temps annuel de travail (heures)"
+# )
